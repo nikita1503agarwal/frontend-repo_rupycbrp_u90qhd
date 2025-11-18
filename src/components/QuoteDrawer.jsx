@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function QuoteDrawer({ boat, onClose }) {
   const [start, setStart] = useState('')
@@ -65,41 +65,41 @@ export default function QuoteDrawer({ boat, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex">
       <div className="flex-1" onClick={onClose} />
-      <div className="w-full sm:w-[420px] h-full bg-slate-950/95 backdrop-blur-xl ring-1 ring-white/10 p-6 overflow-y-auto">
+      <div className="w-full sm:w-[420px] h-full bg-white backdrop-blur-xl ring-1 ring-slate-200 p-6 overflow-y-auto shadow-2xl">
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="text-sky-50 font-semibold">{boat.name}</h3>
-            <p className="text-sky-100/70 text-sm">Transparent pricing</p>
+            <h3 className="text-slate-900 font-semibold">{boat.name}</h3>
+            <p className="text-slate-600 text-sm">Transparent brokerage pricing</p>
           </div>
-          <button onClick={onClose} className="text-sky-100/70 hover:text-sky-50">Close</button>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-700">Close</button>
         </div>
 
         <div className="mt-6 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs text-sky-100/70">Start date</label>
-              <input type="date" value={start} onChange={e=>setStart(e.target.value)} className="mt-1 w-full rounded-lg bg-slate-900/60 ring-1 ring-white/10 px-3 py-2 text-sky-50" />
+              <label className="text-xs text-slate-600">Start date</label>
+              <input type="date" value={start} onChange={e=>setStart(e.target.value)} className="mt-1 w-full rounded-lg bg-white ring-1 ring-slate-200 px-3 py-2 text-slate-900" />
             </div>
             <div>
-              <label className="text-xs text-sky-100/70">End date</label>
-              <input type="date" value={end} onChange={e=>setEnd(e.target.value)} className="mt-1 w-full rounded-lg bg-slate-900/60 ring-1 ring-white/10 px-3 py-2 text-sky-50" />
+              <label className="text-xs text-slate-600">End date</label>
+              <input type="date" value={end} onChange={e=>setEnd(e.target.value)} className="mt-1 w-full rounded-lg bg-white ring-1 ring-slate-200 px-3 py-2 text-slate-900" />
             </div>
           </div>
 
           <div>
-            <label className="text-xs text-sky-100/70">Guests</label>
-            <input type="number" min={1} max={boat.capacity} value={guests} onChange={e=>setGuests(parseInt(e.target.value||'1'))} className="mt-1 w-full rounded-lg bg-slate-900/60 ring-1 ring-white/10 px-3 py-2 text-sky-50" />
+            <label className="text-xs text-slate-600">Guests</label>
+            <input type="number" min={1} max={boat.capacity} value={guests} onChange={e=>setGuests(parseInt(e.target.value||'1'))} className="mt-1 w-full rounded-lg bg-white ring-1 ring-slate-200 px-3 py-2 text-slate-900" />
           </div>
 
           <div>
-            <div className="text-xs text-sky-100/70">Extras</div>
+            <div className="text-xs text-slate-600">Extras</div>
             <div className="mt-2 grid grid-cols-2 gap-2">
               {[
                 {key:'skipper', label:'Skipper'},
                 {key:'fuel', label:'Fuel package'},
                 {key:'snorkel', label:'Snorkel gear'},
               ].map(x=> (
-                <label key={x.key} className="flex items-center gap-2 text-sky-100/80 bg-slate-900/50 ring-1 ring-white/10 rounded-lg px-3 py-2">
+                <label key={x.key} className="flex items-center gap-2 text-slate-800 bg-slate-50 ring-1 ring-slate-200 rounded-lg px-3 py-2">
                   <input type="checkbox" checked={!!extras[x.key]} onChange={()=>toggleExtra(x.key)} />
                   {x.label}
                 </label>
@@ -107,25 +107,25 @@ export default function QuoteDrawer({ boat, onClose }) {
             </div>
           </div>
 
-          <button onClick={fetchQuote} disabled={loading || !start || !end} className="w-full rounded-xl bg-gradient-to-r from-sky-300 via-amber-200 to-orange-200 text-slate-900 font-semibold py-2 disabled:opacity-60 ring-1 ring-white/10">
+          <button onClick={fetchQuote} disabled={loading || !start || !end} className="w-full rounded-xl bg-sky-500 text-white font-semibold py-2 disabled:opacity-60 ring-1 ring-sky-300">
             {loading ? 'Calculating...' : 'Calculate price'}
           </button>
 
           {quote && (
-            <div className="mt-4 bg-slate-900/50 ring-1 ring-white/10 rounded-xl p-4">
-              <h4 className="text-sky-50 font-semibold">Transparent breakdown</h4>
+            <div className="mt-4 bg-slate-50 ring-1 ring-slate-200 rounded-xl p-4">
+              <h4 className="text-slate-900 font-semibold">Transparent breakdown</h4>
               <div className="mt-2 space-y-1 text-sm">
-                <div className="flex justify-between text-sky-100/80"><span>Base ({quote.nights} nights)</span><span>${quote.base.toFixed(2)}</span></div>
+                <div className="flex justify-between text-slate-700"><span>Base ({quote.nights} nights)</span><span>${quote.base.toFixed(2)}</span></div>
                 {Object.entries(quote.extras||{}).map(([k,v])=> (
-                  <div key={k} className="flex justify-between text-sky-100/80"><span>{k}</span><span>${v.toFixed(2)}</span></div>
+                  <div key={k} className="flex justify-between text-slate-700"><span>{k}</span><span>${v.toFixed(2)}</span></div>
                 ))}
-                <div className="flex justify-between text-sky-100/80"><span>Cleaning</span><span>${quote.cleaning_fee.toFixed(2)}</span></div>
-                <div className="flex justify-between text-sky-100/80"><span>Tax</span><span>${quote.tax.toFixed(2)}</span></div>
-                <div className="h-px bg-white/10 my-2" />
-                <div className="flex justify-between text-sky-50 font-semibold text-base"><span>Total</span><span>${quote.total.toFixed(2)}</span></div>
-                <div className="text-[11px] text-amber-200/80 mt-2">No hidden fees. Everything displayed upfront.</div>
+                <div className="flex justify-between text-slate-700"><span>Cleaning</span><span>${quote.cleaning_fee.toFixed(2)}</span></div>
+                <div className="flex justify-between text-slate-700"><span>Tax</span><span>${quote.tax.toFixed(2)}</span></div>
+                <div className="h-px bg-slate-200 my-2" />
+                <div className="flex justify-between text-slate-900 font-semibold text-base"><span>Total</span><span>${quote.total.toFixed(2)}</span></div>
+                <div className="text-[11px] text-amber-700 mt-2">No hidden fees. Everything displayed upfront.</div>
               </div>
-              <button onClick={createBooking} className="mt-4 w-full rounded-lg bg-sky-300 text-slate-900 font-semibold py-2 hover:bg-sky-200 transition">
+              <button onClick={createBooking} className="mt-4 w-full rounded-lg bg-amber-500 text-white font-semibold py-2 hover:bg-amber-400 transition">
                 Request booking
               </button>
             </div>
